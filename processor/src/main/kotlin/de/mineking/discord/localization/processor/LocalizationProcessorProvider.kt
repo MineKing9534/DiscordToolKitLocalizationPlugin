@@ -9,7 +9,7 @@ class LocalizationProcessorProvider : SymbolProcessorProvider {
         environment.codeGenerator,
         environment.logger,
         environment.options["dtk_managerName"]!!,
-        environment.options["dtk_properties"]!!.split(",").associate {
+        environment.options["dtk_properties"]!!.split(",").filter { it.isNotBlank() }.associate {
             val temp = it.split(":", limit = 2)
             temp[0] to temp[1].parseTypeString()
         },
