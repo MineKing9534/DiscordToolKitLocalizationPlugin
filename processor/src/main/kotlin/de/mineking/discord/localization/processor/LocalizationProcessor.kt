@@ -214,8 +214,12 @@ class LocalizationProcessor(
                             val node = (value as? YamlTaggedNode)?.innerNode ?: value
                             val content = node.yamlScalar.content
 
-                            if (locale != defaultLocale) addStatement("%T.$locale -> \"\"\"\n$content\"\"\"", DiscordLocale::class)
-                            else addStatement("else -> \"\"\"\n$content\"\"\"", DiscordLocale::class)
+                            if (locale != defaultLocale) addStatement("%T.$locale -> ", DiscordLocale::class)
+                            else addStatement("else -> ", DiscordLocale::class)
+
+                            addStatement("\"\"\"")
+                            addCode("%L\n", content)
+                            addStatement("\"\"\".trimIndent()")
                         }
                     }
                 .endControlFlow()
