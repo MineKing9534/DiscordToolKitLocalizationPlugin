@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation("de.mineking:DiscordToolKit:TESTING")
+    implementation("de.mineking:DiscordToolKit:1.1.0")
     implementation("com.github.freya022:JDA:1be8478")
     implementation("com.charleskorn.kaml:kaml:0.85.0")
 
