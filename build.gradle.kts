@@ -1,0 +1,36 @@
+plugins {
+    id("maven-publish")
+}
+
+val release = System.getenv("RELEASE") == "true"
+
+allprojects {
+    group = "de.mineking"
+    version = "1.0.0"
+
+    apply(plugin = "maven-publish")
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven("https://maven.mineking.dev/releases")
+        maven("https://jitpack.io")
+    }
+
+    publishing {
+        repositories {
+            maven {
+                url = uri("https://maven.mineking.dev/" + (if (release) "releases" else "snapshots"))
+                credentials {
+                    username = System.getenv("MAVEN_USERNAME")
+                    password = System.getenv("MAVEN_SECRET")
+                }
+            }
+        }
+
+        publications.withType<MavenPublication> {
+            artifactId = "DiscordToolKit-${project.name}"
+            version = if (release) "${project.version}" else System.getenv("BRANCH")
+        }
+    }
+}
