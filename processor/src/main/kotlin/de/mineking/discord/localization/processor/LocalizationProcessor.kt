@@ -31,6 +31,7 @@ class LocalizationProcessor(
     private val logger: KSPLogger,
     private val managerName: String,
     private val properties: Map<String, TypeName>,
+    private val imports: Map<String, ClassName>,
     private val locales: List<DiscordLocale>,
     private val defaultLocale: DiscordLocale,
     private val locationFormat: String,
@@ -139,6 +140,8 @@ class LocalizationProcessor(
         val className = "${definition.simpleName.asString()}Impl"
 
         val fileSpec = FileSpec.builder(definition.getNormalizedPackageName(), className)
+        imports.forEach { (name, qualified) -> fileSpec.addAliasedImport(qualified, name) }
+
         val typeSpec = TypeSpec.classBuilder(className)
             .addSuperinterface(definition.toClassName())
 
@@ -283,6 +286,11 @@ class LocalizationProcessor(
 
     private fun KSClassDeclaration.defaultName() = qualifiedName!!.asString().removePrefix("$botPackage.").removeSuffix(simpleName.asString()) +
         simpleName.asString().replace("(?<=[^A-Z])[A-Z]".toRegex(), "_$0").lowercase()
+
+    private fun String.parseParameterListDefinition() = split(",").map {
+        val temp = it.split(":", limit = 2)
+        ParameterSpec.builder(temp[0], temp[1].parseTypeString(imports)).build()
+    }
 }
 
 private fun KSAnnotated.getAnnotation(name: String) = annotations.firstOrNull {
@@ -291,8 +299,3 @@ private fun KSAnnotated.getAnnotation(name: String) = annotations.firstOrNull {
 }
 
 private fun KSAnnotated.hasAnnotation(name: String) = getAnnotation(name) != null
-
-private fun String.parseParameterListDefinition() = split(",").map {
-    val temp = it.split(":", limit = 2)
-    ParameterSpec.builder(temp[0], temp[1].parseTypeString()).build()
-}

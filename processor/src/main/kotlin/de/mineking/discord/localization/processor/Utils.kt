@@ -29,22 +29,22 @@ private val kotlinPrimitives = mapOf(
     "Unit" to UNIT
 )
 
-fun String.parseTypeString(): TypeName {
+fun String.parseTypeString(imports: Map<String, ClassName> = emptyMap()): TypeName {
     val trimmed = trim()
 
-    if (trimmed.endsWith("?")) return trimmed.dropLast(1).parseTypeString().copy(nullable = true)
+    if (trimmed.endsWith("?")) return trimmed.dropLast(1).parseTypeString(imports).copy(nullable = true)
     if (trimmed == "*") return STAR
 
     val genericStart = trimmed.indexOf("<")
     if (genericStart != -1 && trimmed.endsWith(">")) {
         val baseName = trimmed.substring(0, genericStart).trim()
         val genericPart = trimmed.substring(genericStart + 1, trimmed.length - 1)
-        val typeArguments = splitTopLevelGenerics(genericPart).map { it.parseTypeString() }
+        val typeArguments = splitTopLevelGenerics(genericPart).map { it.parseTypeString(imports) }
 
         return ClassName.bestGuess(baseName).parameterizedBy(*typeArguments.toTypedArray())
     }
 
-    return kotlinPrimitives[trimmed] ?: ClassName.bestGuess(trimmed)
+    return kotlinPrimitives[trimmed] ?: imports[trimmed] ?: ClassName.bestGuess(trimmed)
 }
 
 private fun splitTopLevelGenerics(generics: String): List<String> {

@@ -17,6 +17,7 @@ class LocalizationGradlePlugin : Plugin<Project> {
             project.extensions.configure(KspExtension::class.java) {
                 arg("dtk_managerName", extension.managerName)
                 arg("dtk_properties", extension.properties.map { (name, type) -> "$name:$type" }.joinToString(","))
+                arg("dtk_imports", extension.imports.map { (name, qualified) -> "$name:$qualified" }.joinToString(","))
                 arg("dtk_locales", extension.locales.joinToString(","))
                 arg("dtk_defaultLocale", extension.defaultLocale!!)
                 arg("dtk_locationFormat", extension.locationFormat)

@@ -2,6 +2,7 @@ package de.mineking.discord.localization.processor
 
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.processing.SymbolProcessorProvider
+import com.squareup.kotlinpoet.ClassName
 import net.dv8tion.jda.api.interactions.DiscordLocale
 
 class LocalizationProcessorProvider : SymbolProcessorProvider {
@@ -12,6 +13,12 @@ class LocalizationProcessorProvider : SymbolProcessorProvider {
         environment.options["dtk_properties"]!!.split(",").filter { it.isNotBlank() }.associate {
             val temp = it.split(":", limit = 2)
             temp[0] to temp[1].parseTypeString()
+        },
+        environment.options["dtk_imports"]!!.split(",").filter { it.isNotBlank() }.associate {
+            val temp = it.split(":", limit = 2)
+            val parts = temp[1].split(".")
+
+            temp[0] to ClassName(parts.dropLast(1).joinToString("."), parts.last())
         },
         environment.options["dtk_locales"]!!.split(",").map { DiscordLocale.from(it) },
         DiscordLocale.from(environment.options["dtk_defaultLocale"]!!),

@@ -5,11 +5,16 @@ import kotlin.reflect.typeOf
 open class LocalizationProcessorExtension {
     var managerName: String = "de.mineking.discord.localization.DefaultLocalizationManager"
     var properties: MutableMap<String, String> = mutableMapOf()
+    var imports: MutableMap<String, String> = mutableMapOf()
     var locales: List<String> = listOf("en-US")
     var defaultLocale: String? = null
         get() = field ?: locales.first()
     var locationFormat: String = "text/%locale%/%name%.yaml"
     var botPackage: String = ""
+}
+
+fun LocalizationProcessorExtension.import(qualified: String, name: String = qualified.split(".").last()) {
+    imports[name] = qualified
 }
 
 inline fun <reified T> LocalizationProcessorExtension.declareProperty(name: String) {
