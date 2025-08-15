@@ -7,6 +7,7 @@ This repository contains a gradle plugin and a ksp processor to create `Localiza
 To add the plugin to your project, you first have to add the required repositories to your build:
 
 Add this in your `settings.gradle.kts`:
+
 ```kt
 pluginManagement {
     repositories {
@@ -17,6 +18,7 @@ pluginManagement {
 ```
 
 And in your `build.gradle.kts`:
+
 ```kt
 repositories {
     maven("https://maven.mineking.dev/snapshots")
@@ -24,6 +26,7 @@ repositories {
 ```
 
 Now, to actually add the plugin to your project, add this to your `build.gradle.kts`:
+
 ```kt
 plugins {
     id("de.mineking.discord.localization") version "1.0.0"
@@ -33,6 +36,7 @@ plugins {
 ## Configuration
 
 When to plugin is added to your project, you can now configure it:
+
 ```kt 
 discordLocalization {
     locales = listOf("en-US", "de") //The locales you support

@@ -12,6 +12,7 @@ fun YamlNode.flattenYaml(prefix: String = ""): Map<String, YamlNode> = when (thi
             value.flattenYaml(fullKey).entries
         }.associate { it.key to it.value }
     }
+
     else -> mapOf(prefix to this)
 }
 
@@ -58,16 +59,19 @@ private fun splitTopLevelGenerics(generics: String): List<String> {
                 depth++
                 buffer.append(c)
             }
+
             '>' -> {
                 depth--
                 buffer.append(c)
             }
+
             ',' -> {
                 if (depth == 0) {
                     result += buffer.toString().trim()
                     buffer.clear()
                 } else buffer.append(c)
             }
+
             else -> buffer.append(c)
         }
     }

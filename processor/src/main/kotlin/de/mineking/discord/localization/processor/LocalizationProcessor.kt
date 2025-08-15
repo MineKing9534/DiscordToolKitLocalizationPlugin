@@ -118,15 +118,15 @@ class LocalizationProcessor(
                 .addParameter("type", KClass::class.asClassName().parameterizedBy(localizationFileTypeParameter))
                 .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "UNCHECKED_CAST").build())
                 .beginControlFlow("return cache.getOrPut(type)")
-                    .beginControlFlow("when (type)")
-                        .apply {
-                            implementations.forEach { (interfaceDefinition, classDefinition) ->
-                                addStatement("%T::class -> %T(this)", interfaceDefinition.toClassName(), ClassName(classDefinition.first, classDefinition.second))
-                            }
+                .beginControlFlow("when (type)")
+                .apply {
+                    implementations.forEach { (interfaceDefinition, classDefinition) ->
+                        addStatement("%T::class -> %T(this)", interfaceDefinition.toClassName(), ClassName(classDefinition.first, classDefinition.second))
+                    }
 
-                            addStatement($$"else -> error(\"Could not find LocalizationFile implementation for $type\")")
-                        }
-                    .endControlFlow()
+                    addStatement($$"else -> error(\"Could not find LocalizationFile implementation for $type\")")
+                }
+                .endControlFlow()
                 .endControlFlow()
                 .addCode("as %T\n", localizationFileTypeParameter)
                 .build()
@@ -212,19 +212,19 @@ class LocalizationProcessor(
                 .addParameters(parameters)
                 .returns(String::class)
                 .beginControlFlow("return when (locale)")
-                    .apply {
-                        values.entries.sortedBy { (locale) -> locale == defaultLocale }.forEach { (locale, value) ->
-                            val node = (value as? YamlTaggedNode)?.innerNode ?: value
-                            val content = node.yamlScalar.content
+                .apply {
+                    values.entries.sortedBy { (locale) -> locale == defaultLocale }.forEach { (locale, value) ->
+                        val node = (value as? YamlTaggedNode)?.innerNode ?: value
+                        val content = node.yamlScalar.content
 
-                            if (locale != defaultLocale) addStatement("%T.$locale -> ", DiscordLocale::class)
-                            else addStatement("else -> ", DiscordLocale::class)
+                        if (locale != defaultLocale) addStatement("%T.$locale -> ", DiscordLocale::class)
+                        else addStatement("else -> ", DiscordLocale::class)
 
-                            addStatement("\"\"\"")
-                            addCode("%L\n", content)
-                            addStatement("\"\"\".trimIndent()")
-                        }
+                        addStatement("\"\"\"")
+                        addCode("%L\n", content)
+                        addStatement("\"\"\".trimIndent()")
                     }
+                }
                 .endControlFlow()
                 .build()
 
@@ -239,13 +239,13 @@ class LocalizationProcessor(
                 .addParameter("args", Map::class.asClassName().parameterizedBy(String::class.asClassName(), STAR))
                 .returns(String::class)
                 .beginControlFlow("return when (name)")
-                    .apply {
-                        typedEntries.forEach { name, parameters ->
-                            addStatement("%S -> %N(${(listOf("locale") + parameters.map { "${it.name} = args[\"${it.name}\"] as ${it.type}" }).joinToString(", ")})", name, name.replace(".", "_"))
-                        }
-
-                        addStatement($$"else -> error(\"Localization $name not found\")")
+                .apply {
+                    typedEntries.forEach { name, parameters ->
+                        addStatement("%S -> %N(${(listOf("locale") + parameters.map { "${it.name} = args[\"${it.name}\"] as ${it.type}" }).joinToString(", ")})", name, name.replace(".", "_"))
                     }
+
+                    addStatement($$"else -> error(\"Localization $name not found\")")
+                }
                 .endControlFlow()
                 .build()
         )
@@ -264,7 +264,7 @@ class LocalizationProcessor(
             locales.flatMap { locale ->
                 val content = readLocalizationFileForLocale(locale, fileName) ?: emptyMap()
                 content.map { (label, value) ->
-                    label to (locale to  value)
+                    label to (locale to value)
                 }
             }.groupBy { (name) -> name }.mapValues { (_, entry) -> entry.associate { it.second } }
         }
@@ -285,7 +285,7 @@ class LocalizationProcessor(
     }
 
     private fun KSClassDeclaration.defaultName() = qualifiedName!!.asString().removePrefix("$botPackage.").removeSuffix(simpleName.asString()) +
-        simpleName.asString().replace("(?<=[^A-Z])[A-Z]".toRegex(), "_$0").lowercase()
+            simpleName.asString().replace("(?<=[^A-Z])[A-Z]".toRegex(), "_$0").lowercase()
 
     private fun String.parseParameterListDefinition() = split(",").map {
         val temp = it.split(":", limit = 2)
