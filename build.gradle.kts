@@ -6,7 +6,7 @@ val release = System.getenv("RELEASE") == "true"
 
 allprojects {
     group = "de.mineking"
-    version = "1.0.0"
+    version = "1.0.1"
 
     apply(plugin = "maven-publish")
 
@@ -14,7 +14,6 @@ allprojects {
         mavenCentral()
         mavenLocal()
         maven("https://maven.mineking.dev/releases")
-        maven("https://jitpack.io")
     }
 
     publishing {

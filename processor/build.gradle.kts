@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     implementation("de.mineking:DiscordToolKit:1.1.0")
-    implementation("com.github.freya022:JDA:1be8478")
+    implementation("net.dv8tion:JDA:6.0.0-rc.4")
     implementation("com.charleskorn.kaml:kaml:0.85.0")
 
     implementation("com.squareup:kotlinpoet-ksp:2.2.0")
