@@ -4,11 +4,12 @@ plugins {
 
 val release = System.getenv("RELEASE") == "true"
 
+version = "1.1.0"
+rootProject.extra["effectiveVersion"] = System.getenv("BRANCH") ?: version
+
 allprojects {
     group = "de.mineking"
-    version = "1.1.0"
-
-    rootProject.extra["effectiveVersion"] = if (release) version else System.getenv("BRANCH")
+    version = rootProject.version
 
     apply(plugin = "maven-publish")
 
