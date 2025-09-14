@@ -9,7 +9,8 @@ open class LocalizationProcessorExtension {
     var locales: List<String> = listOf("en-US")
     var defaultLocale: String? = null
         get() = field ?: locales.first()
-    var locationFormat: String = "text/%locale%/%name%.yaml"
+    var localizationDirectory = "localization"
+    var locationFormat: String = "%locale%/%name%.yaml"
     var botPackage: String = ""
 }
 

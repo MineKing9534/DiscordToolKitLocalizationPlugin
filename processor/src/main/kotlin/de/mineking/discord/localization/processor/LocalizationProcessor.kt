@@ -159,7 +159,7 @@ class LocalizationProcessor(
                 .build()
         )
 
-        properties.forEach { name, type ->
+        properties.forEach { (name, type) ->
             typeSpec.addProperty(
                 PropertySpec.builder(name, type)
                     .delegate("manager.properties")
@@ -196,7 +196,7 @@ class LocalizationProcessor(
 
         val typedEntries = mutableMapOf<String, List<ParameterSpec>>()
 
-        entries.forEach { name, values ->
+        entries.forEach { (name, values) ->
             val parameters = typeData[name]?.map { ParameterSpec.builder(it.name!!.asString(), it.type.resolve().toClassName()).build() } ?: values
                 .mapNotNull { (it.value as? YamlTaggedNode)?.tag }
                 .toSet()
@@ -240,7 +240,7 @@ class LocalizationProcessor(
                 .returns(String::class)
                 .beginControlFlow("return when (name)")
                 .apply {
-                    typedEntries.forEach { name, parameters ->
+                    typedEntries.forEach { (name, parameters) ->
                         addStatement("%S -> %N(${(listOf("locale") + parameters.map { "${it.name} = args[\"${it.name}\"] as ${it.type}" }).joinToString(", ")})", name, name.replace(".", "_"))
                     }
 
