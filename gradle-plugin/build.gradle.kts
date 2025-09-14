@@ -23,3 +23,9 @@ gradlePlugin {
         }
     }
 }
+
+tasks.jar {
+    manifest {
+        attributes["Implementation-Version"] = rootProject.extra["effectiveVersion"]
+    }
+}

@@ -25,6 +25,7 @@ class LocalizationGradlePlugin : Plugin<Project> {
             }
         }
 
-        project.dependencies.add("ksp", "de.mineking:DiscordToolKit-processor:1.0.1")
+        val pluginVersion = this@LocalizationGradlePlugin::class.java.`package`.implementationVersion
+        project.dependencies.add("ksp", "de.mineking:DiscordToolKit-processor:$pluginVersion")
     }
 }

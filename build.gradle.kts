@@ -3,6 +3,7 @@ plugins {
 }
 
 val release = System.getenv("RELEASE") == "true"
+rootProject.extra["effectiveVersion"] = if (release) "${project.version}" else System.getenv("BRANCH")
 
 allprojects {
     group = "de.mineking"
@@ -29,7 +30,7 @@ allprojects {
 
         publications.withType<MavenPublication> {
             artifactId = "DiscordToolKit-${project.name}"
-            version = if (release) "${project.version}" else System.getenv("BRANCH")
+            version = rootProject.extra["effectiveVersion"].toString()
         }
     }
 }
