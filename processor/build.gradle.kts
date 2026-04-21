@@ -3,9 +3,9 @@ plugins {
 }
 
 dependencies {
-    implementation("de.mineking:DiscordToolKit:1.1.0")
-    implementation("net.dv8tion:JDA:6.0.0-rc.4")
-    implementation("com.charleskorn.kaml:kaml:0.85.0")
+    implementation("de.mineking:DiscordToolKit:1.5.1")
+    implementation("net.dv8tion:JDA:6.4.1")
+    implementation("com.charleskorn.kaml:kaml:0.104.0")
 
     implementation("com.squareup:kotlinpoet-ksp:2.2.0")
     implementation("com.google.dagger:dagger-compiler:2.51.1")
