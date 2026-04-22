@@ -1,7 +1,7 @@
 package de.mineking.discord.localization.gradle
 
+import com.google.devtools.ksp.gradle.KspAATask
 import com.google.devtools.ksp.gradle.KspExtension
-import com.google.devtools.ksp.gradle.KspTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -35,7 +35,7 @@ class LocalizationGradlePlugin : Plugin<Project> {
                 )
             }
 
-            project.tasks.withType(KspTask::class.java).configureEach {
+            project.tasks.withType(KspAATask::class.java).configureEach {
                 inputs.dir(directory).withPropertyName("localizationDirectory")
             }
         }

@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.2.0"
+    kotlin("jvm") version "2.3.20"
 }
 
 dependencies {
@@ -7,8 +7,8 @@ dependencies {
     implementation("net.dv8tion:JDA:6.4.1")
     implementation("com.charleskorn.kaml:kaml:0.104.0")
 
-    implementation("com.squareup:kotlinpoet-ksp:2.2.0")
-    implementation("com.google.dagger:dagger-compiler:2.51.1")
+    implementation("com.squareup:kotlinpoet-ksp:2.3.0")
+    implementation("com.google.dagger:dagger-compiler:2.59.2")
 }
 
 publishing {
