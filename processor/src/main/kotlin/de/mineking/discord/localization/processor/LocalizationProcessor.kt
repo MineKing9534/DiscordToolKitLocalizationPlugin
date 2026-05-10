@@ -211,21 +211,27 @@ class LocalizationProcessor(
                 .addParameter("locale", DiscordLocale::class)
                 .addParameters(parameters)
                 .returns(String::class)
-                .beginControlFlow("return when (locale)")
-                .apply {
-                    values.entries.sortedBy { (locale) -> locale == defaultLocale }.forEach { (locale, value) ->
-                        val node = (value as? YamlTaggedNode)?.innerNode ?: value
-                        val content = node.yamlScalar.content
+                .addCode(
+                    CodeBlock.builder()
+                        .beginControlFlow("return when (locale)")
+                        .apply {
+                            values.entries.sortedBy { (locale) -> locale == defaultLocale }.forEach { (locale, value) ->
+                                val node = (value as? YamlTaggedNode)?.innerNode ?: value
+                                val content = node.yamlScalar.content
 
-                        if (locale != defaultLocale) addStatement("%T.$locale -> ", DiscordLocale::class)
-                        else addStatement("else -> ", DiscordLocale::class)
+                                if (locale != defaultLocale) add("%T.$locale ->\n", DiscordLocale::class, locale)
+                                else add("else ->\n")
 
-                        addStatement("\"\"\"")
-                        addCode("%L\n", content)
-                        addStatement("\"\"\".trimIndent()")
-                    }
-                }
-                .endControlFlow()
+                                unindent()
+                                unindent()
+                                add("\"\"\"%L\"\"\"\n", content)
+                                indent()
+                                indent()
+                            }
+                        }
+                        .endControlFlow()
+                        .build()
+                )
                 .build()
 
             typeSpec.addFunction(function)
