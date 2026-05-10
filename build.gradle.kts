@@ -4,7 +4,7 @@ plugins {
 
 val release = System.getenv("RELEASE") == "true"
 
-version = "1.2.0"
+version = "1.2.1"
 rootProject.extra["effectiveVersion"] = System.getenv("BRANCH") ?: version
 
 allprojects {

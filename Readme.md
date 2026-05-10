@@ -29,7 +29,7 @@ Now, to actually add the plugin to your project, add this to your `build.gradle.
 
 ```kt
 plugins {
-    id("de.mineking.discord.localization") version "1.0.0"
+    id("de.mineking.discord.localization") version "1.2.1"
 } 
 ```
 
